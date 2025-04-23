@@ -17,7 +17,7 @@ declare const module: any;
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
-    logger: process.env.NODE_ENV === 'production' ? ['error', 'warn'] : ['debug']
+    bufferLogs: true
   });
 
   app.useGlobalPipes(
@@ -56,6 +56,10 @@ async function bootstrap() {
     return app.getHttpAdapter().getInstance();
   }
   await app.listen(process.env.PORT || 3000)
-  module.exports = app.getHttpAdapter().getInstance();
 }
-bootstrap()
+const server = bootstrap().catch(err => {
+  console.error('Failed to start server:', err);
+  process.exit(1);
+});
+
+export default server;

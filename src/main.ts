@@ -16,7 +16,9 @@ import * as cookieParser from 'cookie-parser';
 declare const module: any;
 
 async function bootstrap() {
-  const app = await NestFactory.create<NestExpressApplication>(AppModule)
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
+    logger: process.env.NODE_ENV === 'production' ? ['error', 'warn'] : ['debug']
+  });
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -51,8 +53,9 @@ async function bootstrap() {
 
   if (process.env.NODE_ENV === 'production') {
     await app.init();
+    return app.getHttpAdapter().getInstance();
   }
   await app.listen(process.env.PORT || 3000)
-  module.export = app.getHttpAdapter().getInstance();
+  module.exports = app.getHttpAdapter().getInstance();
 }
 bootstrap()

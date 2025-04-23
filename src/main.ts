@@ -49,6 +49,10 @@ async function bootstrap() {
 
   app.setViewEngine('hbs')
 
-  await app.listen(3000)
+  if (process.env.NODE_ENV === 'production') {
+    await app.init();
+  }
+  await app.listen(process.env.PORT || 3000)
+  module.export = app.getHttpAdapter().getInstance();
 }
 bootstrap()

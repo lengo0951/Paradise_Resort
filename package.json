@@ -6,7 +6,7 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "vercel-build": "prisma generate && nest build && prisma migrate deploy",
+   "vercel-build": "prisma generate && nest build && prisma migrate deploy && cp -R public dist/ && cp -R views dist/",
     "prisma:dev:deploy": "prisma migrate deploy",
     "db:dev:rm": "docker compose rm dev-db -s -f -v",
     "db:dev:up": "docker compose up dev-db -d",
